@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_realtime_stock_opname" model="ir.sequence">
+        <field name="name">Realtime Stock Opname Sequence</field>
+        <field name="code">realtime.stock.opname</field>
+        <field name="prefix">RSO/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="view_realtime_stock_opname_tree" model="ir.ui.view">
+        <field name="name">realtime.stock.opname.tree</field>
+        <field name="model">realtime.stock.opname</field>
+        <field name="arch" type="xml">
+            <tree string="Realtime Stock Opname" decoration-info="state == 'draft'" decoration-success="state == 'done'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="location_id"/>
+                <field name="division_id" optional="show"/>
+                <field name="user_id" optional="show"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_realtime_stock_opname_form" model="ir.ui.view">
+        <field name="name">realtime.stock.opname.form</field>
+        <field name="model">realtime.stock.opname</field>
+        <field name="arch" type="xml">
+            <form string="Realtime Stock Opname">
+                <header>
+                    <button name="action_apply" string="Apply Adjustment" type="object" class="oe_highlight" states="draft" groups="realtime_stock_opname.group_realtime_stock_opname_apply" confirm="Are you sure you want to apply this stock adjustment?"/>
+                    <button name="action_lock" string="Document Lock" type="object" class="btn-primary" states="draft" groups="realtime_stock_opname.group_realtime_stock_opname_lock"/>
+                    <button name="action_unlock" string="Unlock" type="object" class="btn-warning" states="done" groups="realtime_stock_opname.group_realtime_stock_opname_unlock" confirm="Are you sure you want to unlock this stock opname session?"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="location_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="date"/>
+                            <field name="user_id" readonly="1" options="{'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="division_id" options="{'no_create': True, 'no_open': True}"/>
+                            <div>
+                                <button name="action_open_camera_scanner" string="Scan Camera" type="object" class="oe_highlight btn-primary" icon="fa-camera" states="draft"/>
+                            </div>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products" name="products">
+                            <field name="line_ids">
+                                <tree editable="bottom" create="false">
+                                    <field name="product_id" readonly="1" force_save="1" optional="show"/>
+                                    <field name="barcode" readonly="1" optional="show"/>
+                                    <field name="categ_id" readonly="1" optional="show"/>
+                                    <field name="uom_id" readonly="1" optional="show"/>
+                                    <field name="current_qty" readonly="1" force_save="1" optional="show"/>
+                                    <field name="sold_qty" readonly="1" force_save="1" optional="show"/>
+                                    <field name="internal_transfer_qty" readonly="1" force_save="1" optional="show"/>
+                                    <field name="quantity" string="Stock Qty" optional="show"/>
+                                    <field name="total_qty" readonly="1" force_save="1" optional="show"/>
+                                    <field name="create_uid" string="Created by" readonly="1" options="{'no_open': True}" optional="show"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_realtime_stock_opname_qty_wizard_form" model="ir.ui.view">
+        <field name="name">realtime.stock.opname.qty.wizard.form</field>
+        <field name="model">realtime.stock.opname.qty.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Input Stock Quantity">
+                <sheet>
+                    <group>
+                        <field name="product_id" readonly="1"/>
+                        <field name="barcode" readonly="1"/>
+                        <field name="categ_id" readonly="1" options="{'no_open': True}"/>
+                        <field name="uom_id" readonly="1"/>
+                        <field name="current_qty" readonly="1"/>
+                        <field name="existing_opname_qty" readonly="1" attrs="{'invisible': [('existing_opname_qty', '=', 0.0)]}"/>
+                        <field name="quantity" class="oe_highlight" style="font-size: 1.5rem; font-weight: bold;"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" string="Set / Add Quantity" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_stocktaking_list_tree" model="ir.ui.view">
+        <field name="name">realtime.stock.opname.line.stocktaking.tree</field>
+        <field name="model">realtime.stock.opname.line</field>
+        <field name="arch" type="xml">
+            <tree string="Stocktaking List" create="false" edit="false" delete="false">
+                <field name="product_name" string="Product" optional="show"/>
+                <field name="barcode" optional="show"/>
+                <field name="categ_id" optional="show"/>
+                <field name="location_id" optional="show" options="{'no_open': True}"/>
+                <field name="division_id" optional="show"/>
+                <field name="uom_id" optional="show"/>
+                <field name="current_qty" optional="show"/>
+                <field name="sold_qty" optional="show"/>
+                <field name="internal_transfer_qty" optional="show"/>
+                <field name="quantity" string="Stock Qty" optional="show"/>
+                <field name="total_qty" string="Total Qty" optional="show"/>
+                <field name="cost_price" optional="show"/>
+                <field name="lst_price" optional="show"/>
+                <field name="total_cost" string="T. Cost" optional="show" sum="Total Cost"/>
+                <field name="total_sales_price" string="T. Sales Price" optional="show" sum="Total Sales Price"/>
+                <field name="create_uid" string="Created by" optional="show"/>
+                <field name="reference" optional="show"/>
+                <field name="date" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_stocktaking_list_search" model="ir.ui.view">
+        <field name="name">realtime.stock.opname.line.stocktaking.search</field>
+        <field name="model">realtime.stock.opname.line</field>
+        <field name="arch" type="xml">
+            <search string="Stocktaking List">
+                <field name="product_id"/>
+                <field name="barcode"/>
+                <field name="categ_id"/>
+                <field name="location_id"/>
+                <field name="reference"/>
+                <field name="division_id"/>
+                <field name="create_uid"/>
+                <group expand="0" string="Group By">
+                    <filter string="Location" name="group_location" context="{'group_by': 'location_id'}"/>
+                    <filter string="Reference" name="group_reference" context="{'group_by': 'reference'}"/>
+                    <filter string="Product" name="group_product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Product Category" name="group_category" context="{'group_by': 'categ_id'}"/>
+                    <filter string="Division" name="group_division" context="{'group_by': 'division_id'}"/>
+                    <filter string="Created by" name="group_create_uid" context="{'group_by': 'create_uid'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_realtime_stock_opname" model="ir.actions.act_window">
+        <field name="name">Realtime Stock Opname</field>
+        <field name="res_model">realtime.stock.opname</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Realtime Stock Opname session!
+            </p>
+        </field>
+    </record>
+
+    <record id="action_stocktaking_list" model="ir.actions.act_window">
+        <field name="name">Stocktaking List</field>
+        <field name="res_model">realtime.stock.opname.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_stocktaking_list_tree"/>
+        <field name="search_view_id" ref="view_stocktaking_list_search"/>
+        <field name="context">{'search_default_group_location': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Stocktaking List entries found.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_stock_opname_division_tree" model="ir.ui.view">
+        <field name="name">stock.opname.division.tree</field>
+        <field name="model">stock.opname.division</field>
+        <field name="arch" type="xml">
+            <tree string="Division" editable="bottom">
+                <field name="name" string="Division Name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_stock_opname_division_form" model="ir.ui.view">
+        <field name="name">stock.opname.division.form</field>
+        <field name="model">stock.opname.division</field>
+        <field name="arch" type="xml">
+            <form string="Division">
+                <sheet>
+                    <group>
+                        <field name="name" string="Division Name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_stock_opname_division" model="ir.actions.act_window">
+        <field name="name">Division</field>
+        <field name="res_model">stock.opname.division</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Division!
+            </p>
+        </field>
+    </record>
+
+    <record id="view_stocktaking_discrepancy_tree" model="ir.ui.view">
+        <field name="name">realtime.stock.opname.line.discrepancy.tree</field>
+        <field name="model">realtime.stock.opname.line</field>
+        <field name="arch" type="xml">
+            <tree string="Discrepancies Before and After Stocktaking" create="false" edit="false" delete="false">
+                <field name="product_name" string="Product" optional="show"/>
+                <field name="barcode" optional="show"/>
+                <field name="categ_id" optional="show"/>
+                <field name="location_id" optional="show" options="{'no_open': True}"/>
+                <field name="division_id" optional="show"/>
+                <field name="uom_id" string="Unit of Measure" optional="show"/>
+                <field name="cost_price" optional="show" sum="Total Cost"/>
+                <field name="lst_price" optional="show" sum="Total Sales Price"/>
+                <field name="current_qty" string="Current Qty" optional="show" sum="Total Current Qty"/>
+                <field name="sold_qty" string="Sold Qty" optional="show" sum="Total Sold Qty"/>
+                <field name="internal_transfer_qty" string="Internal Transfers Qty" optional="show" sum="Total Internal Transfers Qty"/>
+                <field name="quantity" string="Stock Qty" optional="show" sum="Total Stock Qty"/>
+                <field name="difference_qty" string="Difference Qty" optional="show" sum="Total Difference"/>
+                <field name="sp_x_stock_qty" string="SP x Stock Qty" optional="show" sum="Total SP x Stock Qty"/>
+                <field name="sp_x_difference_qty" string="SP x Difference Qty" optional="show" sum="Total SP x Difference"/>
+                <field name="discrepancy_category" optional="show"/>
+                <field name="compliance_status" optional="show"/>
+                <field name="create_uid" string="Created by" optional="show"/>
+                <field name="reference" optional="show"/>
+                <field name="date" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_stocktaking_discrepancy_pivot" model="ir.ui.view">
+        <field name="name">realtime.stock.opname.line.discrepancy.pivot</field>
+        <field name="model">realtime.stock.opname.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Report on Discrepancies Before and After Stocktaking" display_quantity="true">
+                <field name="compliance_status" type="row"/>
+                <field name="discrepancy_category" type="col"/>
+                <field name="cost_price" type="measure"/>
+                <field name="lst_price" type="measure"/>
+                <field name="current_qty" type="measure"/>
+                <field name="sold_qty" type="measure"/>
+                <field name="internal_transfer_qty" type="measure"/>
+                <field name="quantity" type="measure"/>
+                <field name="total_qty" type="measure"/>
+                <field name="difference_qty" type="measure"/>
+                <field name="sp_x_stock_qty" type="measure"/>
+                <field name="sp_x_difference_qty" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_stocktaking_discrepancy_graph" model="ir.ui.view">
+        <field name="name">realtime.stock.opname.line.discrepancy.graph</field>
+        <field name="model">realtime.stock.opname.line</field>
+        <field name="arch" type="xml">
+            <graph string="Discrepancy Analysis" type="pie">
+                <field name="compliance_status"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_stocktaking_discrepancy_search" model="ir.ui.view">
+        <field name="name">realtime.stock.opname.line.discrepancy.search</field>
+        <field name="model">realtime.stock.opname.line</field>
+        <field name="arch" type="xml">
+            <search string="Discrepancies Search">
+                <field name="product_id"/>
+                <field name="barcode"/>
+                <field name="categ_id"/>
+                <field name="location_id"/>
+                <field name="division_id"/>
+                <field name="reference"/>
+                <field name="compliance_status"/>
+                <field name="discrepancy_category"/>
+                <filter string="Sesuai Stok (= 0)" name="compliant" domain="[('compliance_status', '=', 'compliant')]"/>
+                <filter string="Tidak Sesuai Stok" name="non_compliant" domain="[('compliance_status', '=', 'non_compliant')]"/>
+                <separator/>
+                <filter string="Selisih &gt; 1" name="greater_1" domain="[('discrepancy_category', '=', 'greater_1')]"/>
+                <filter string="Selisih &lt; -1" name="less_minus_1" domain="[('discrepancy_category', '=', 'less_minus_1')]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Location" name="group_location" context="{'group_by': 'location_id'}"/>
+                    <filter string="Stock Status" name="group_compliance_status" context="{'group_by': 'compliance_status'}"/>
+                    <filter string="Discrepancy Category" name="group_discrepancy_category" context="{'group_by': 'discrepancy_category'}"/>
+                    <filter string="Product Category" name="group_category" context="{'group_by': 'categ_id'}"/>
+                    <filter string="Division" name="group_division" context="{'group_by': 'division_id'}"/>
+                    <filter string="Reference" name="group_reference" context="{'group_by': 'reference'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_report_stock_discrepancies" model="ir.actions.act_window">
+        <field name="name">Report on Discrepancies Before and After Stocktaking</field>
+        <field name="res_model">realtime.stock.opname.line</field>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="view_id" ref="view_stocktaking_discrepancy_tree"/>
+        <field name="search_view_id" ref="view_stocktaking_discrepancy_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Stocktaking Discrepancies found.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_product_not_recorded_tree" model="ir.ui.view">
+        <field name="name">stock.quant.not.recorded.tree</field>
+        <field name="model">stock.quant</field>
+        <field name="arch" type="xml">
+            <tree string="Product Not Recorded in Stock Take" create="false" edit="false" delete="false">
+                <field name="product_id" optional="show" options="{'no_open': True}"/>
+                <field name="barcode" optional="show"/>
+                <field name="categ_id" string="Product Category" optional="show" options="{'no_open': True}"/>
+                <field name="location_id" optional="show" options="{'no_open': True}"/>
+                <field name="quantity" string="Quantity On Hand" optional="show"/>
+                <field name="product_uom_id" optional="show" options="{'no_open': True}"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_product_not_recorded_form" model="ir.ui.view">
+        <field name="name">stock.quant.not.recorded.form</field>
+        <field name="model">stock.quant</field>
+        <field name="arch" type="xml">
+            <form string="Product Not Recorded in Stock Take" create="false" edit="false" delete="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="location_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="lot_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="company_id" readonly="1" options="{'no_open': True}"/>
+                        </group>
+                        <group>
+                            <label for="quantity" string="Quantity On Hand"/>
+                            <div class="o_row">
+                                <field name="quantity" readonly="1"/>
+                                <field name="product_uom_id" readonly="1" options="{'no_open': True}"/>
+                            </div>
+                            <label for="available_quantity" string="Available Quantity"/>
+                            <div class="o_row">
+                                <field name="available_quantity" readonly="1"/>
+                                <field name="product_uom_id" readonly="1" options="{'no_open': True}"/>
+                            </div>
+                            <label for="reserved_quantity" string="Quantity Reserved"/>
+                            <div class="o_row">
+                                <field name="reserved_quantity" readonly="1"/>
+                                <field name="product_uom_id" readonly="1" options="{'no_open': True}"/>
+                            </div>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_product_not_recorded_search" model="ir.ui.view">
+        <field name="name">stock.quant.not.recorded.search</field>
+        <field name="model">stock.quant</field>
+        <field name="arch" type="xml">
+            <search string="Product Not Recorded Search">
+                <field name="product_id"/>
+                <field name="barcode"/>
+                <field name="categ_id"/>
+                <field name="location_id"/>
+                <group expand="1" string="Group By">
+                    <filter string="Location" name="groupby_location" context="{'group_by': 'location_id'}"/>
+                    <filter string="Product Category" name="groupby_categ" context="{'group_by': 'categ_id'}"/>
+                    <filter string="Product" name="groupby_product" context="{'group_by': 'product_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_products_not_recorded" model="ir.actions.server">
+        <field name="name">Product Not Recorded in Stock Take</field>
+        <field name="model_id" ref="model_realtime_stock_opname_line"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open_products_not_recorded()</field>
+    </record>
+
+    <menuitem id="menu_realtime_stock_opname_root" name="Realtime Stock Opname" web_icon="realtime_stock_opname,static/description/icon.png" groups="group_realtime_stock_opname_user" sequence="25"/>
+    <menuitem id="menu_realtime_stock_opname_session" name="Stock Opname Session" parent="menu_realtime_stock_opname_root" action="action_realtime_stock_opname" sequence="10"/>
+    <menuitem id="menu_stocktaking_list" name="Stocktaking List" parent="menu_realtime_stock_opname_root" action="action_stocktaking_list" sequence="20"/>
+    <menuitem id="menu_products_not_recorded" name="Product Not Recorded in Stock Take" parent="menu_realtime_stock_opname_root" action="action_products_not_recorded" sequence="30"/>
+    <menuitem id="menu_realtime_stock_opname_reporting" name="Reporting" parent="menu_realtime_stock_opname_root" sequence="80"/>
+    <menuitem id="menu_report_discrepancies" name="Report on Discrepancies Before and After Stocktaking" parent="menu_realtime_stock_opname_reporting" action="action_report_stock_discrepancies" sequence="10"/>
+    <menuitem id="menu_realtime_stock_opname_config" name="Configuration" parent="menu_realtime_stock_opname_root" sequence="90" groups="base.group_system"/>
+    <menuitem id="menu_stock_opname_division" name="Division" parent="menu_realtime_stock_opname_config" action="action_stock_opname_division" sequence="20"/>
+
+    <menuitem id="menu_stock_inventory_audit_root" name="Stock inventory audit" web_icon="realtime_stock_opname,static/description/icon.png" groups="group_realtime_stock_opname_user" sequence="26"/>
+    <menuitem id="menu_stock_inventory_audit_session" name="Stock Opname Session" parent="menu_stock_inventory_audit_root" action="action_realtime_stock_opname" sequence="10"/>
+    <menuitem id="menu_stock_inventory_audit_stocktaking_list" name="Stocktaking List" parent="menu_stock_inventory_audit_root" action="action_stocktaking_list" sequence="20"/>
+    <menuitem id="menu_stock_inventory_audit_products_not_recorded" name="Product Not Recorded in Stock Take" parent="menu_stock_inventory_audit_root" action="action_products_not_recorded" sequence="30"/>
+    <menuitem id="menu_stock_inventory_audit_reporting" name="Reporting" parent="menu_stock_inventory_audit_root" sequence="80"/>
+    <menuitem id="menu_stock_inventory_audit_report_discrepancies" name="Report on Discrepancies Before and After Stocktaking" parent="menu_stock_inventory_audit_reporting" action="action_report_stock_discrepancies" sequence="10"/>
+    <menuitem id="menu_stock_inventory_audit_config" name="Configuration" parent="menu_stock_inventory_audit_root" sequence="90" groups="base.group_system"/>
+    <menuitem id="menu_stock_inventory_audit_division" name="Division" parent="menu_stock_inventory_audit_config" action="action_stock_opname_division" sequence="20"/>
+
+    <record id="view_stock_reconciliation_wizard_form" model="ir.ui.view">
+        <field name="name">stock.reconciliation.wizard.form</field>
+        <field name="model">stock.reconciliation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Stock Reconciliation">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_print_excel" string="Print Excel" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_stock_reconciliation_wizard" model="ir.actions.act_window">
+        <field name="name">Stock Reconciliation</field>
+        <field name="res_model">stock.reconciliation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_stock_reconciliation" name="Stock Reconciliation" parent="menu_realtime_stock_opname_reporting" action="action_stock_reconciliation_wizard" sequence="20"/>
+    <menuitem id="menu_stock_inventory_audit_reconciliation" name="Stock Reconciliation" parent="menu_stock_inventory_audit_reporting" action="action_stock_reconciliation_wizard" sequence="20"/>
+</odoo>

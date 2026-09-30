@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_central_goods_monitoring,central.goods.monitoring,model_central_goods_monitoring,base.group_user,1,1,1,1
+access_central_goods_monitoring_line,central.goods.monitoring.line,model_central_goods_monitoring_line,base.group_user,1,1,1,1

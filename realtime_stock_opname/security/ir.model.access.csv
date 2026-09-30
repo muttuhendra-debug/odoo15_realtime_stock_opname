@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_realtime_stock_opname,realtime.stock.opname,model_realtime_stock_opname,group_realtime_stock_opname_user,1,1,1,1
+access_realtime_stock_opname_line_user,realtime.stock.opname.line user,model_realtime_stock_opname_line,group_realtime_stock_opname_user,1,1,1,0
+access_realtime_stock_opname_line_delete,realtime.stock.opname.line delete,model_realtime_stock_opname_line,group_realtime_stock_opname_delete,1,1,1,1
+access_realtime_stock_opname_qty_wizard,realtime.stock.opname.qty.wizard,model_realtime_stock_opname_qty_wizard,group_realtime_stock_opname_user,1,1,1,1
+access_stock_opname_division,stock.opname.division,model_stock_opname_division,group_realtime_stock_opname_user,1,1,1,1
+access_stock_reconciliation_wizard,stock.reconciliation.wizard,model_stock_reconciliation_wizard,group_realtime_stock_opname_user,1,1,1,1

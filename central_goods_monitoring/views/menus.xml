@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_central_goods_monitoring_root"
+              name="Central Monitoring"
+              sequence="10"
+              web_icon="central_goods_monitoring,static/description/icon.png"/>
+
+    <menuitem id="menu_central_goods_monitoring"
+              name="Goods Out to Branch"
+              parent="menu_central_goods_monitoring_root"
+              action="action_central_goods_monitoring"
+              sequence="10"/>
+
+    <menuitem id="menu_central_goods_check_out_new_products"
+              name="Check Out New Products"
+              parent="menu_central_goods_monitoring_root"
+              action="action_central_goods_monitoring_new_products"
+              sequence="15"/>
+
+    <menuitem id="menu_central_goods_fetch"
+              name="Fetch Data"
+              parent="menu_central_goods_monitoring_root"
+              action="action_server_fetch_data"
+              sequence="20"/>
+</odoo>

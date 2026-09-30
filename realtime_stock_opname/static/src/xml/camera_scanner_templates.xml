@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="realtime_stock_opname.CameraScannerTemplate">
+        <div class="o_camera_scanner_container text-center p-3">
+            <div class="card shadow-sm mx-auto" style="max-width: 500px;">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="m-0"><i class="fa fa-camera mr-2"/>Smartphone Barcode Scanner</h5>
+                    <div>
+                        <button type="button" class="btn btn-warning btn-sm mr-2 o_btn_toggle_flash" title="Toggle Flashlight">
+                            <i class="fa fa-bolt mr-1"/> Flash
+                        </button>
+                        <button type="button" class="close text-white o_btn_close_scanner" aria-label="Close">
+                            <span aria-hidden="true">&#215;</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="btn btn-success btn-block btn-lg m-0 shadow-sm cursor-pointer" style="font-size: 1.1rem; cursor: pointer;">
+                            <i class="fa fa-camera mr-2"/>Take Photo / Scan Barcode
+                            <input type="file" class="o_input_camera_file d-none" accept="image/*" capture="environment"/>
+                        </label>
+                    </div>
+                    <div class="o_camera_video_wrapper position-relative mb-3 bg-dark rounded overflow-hidden" style="max-height: 260px; min-height: 180px;">
+                        <style>
+                            .o_camera_video_wrapper video,
+                            .o_camera_video_wrapper canvas,
+                            .o_camera_video_wrapper img {
+                                width: 100% !important;
+                                max-height: 260px !important;
+                                object-fit: cover !important;
+                            }
+                            .o_camera_video_wrapper canvas.drawingBuffer {
+                                position: absolute !important;
+                                top: 0 !important;
+                                left: 0 !important;
+                                width: 100% !important;
+                                height: 100% !important;
+                            }
+                        </style>
+                        <video class="o_camera_video w-100" style="max-height: 260px; object-fit: cover;" playsinline="true"/>
+                        <img class="o_camera_preview_img d-none w-100" style="max-height: 260px; object-fit: cover;" alt="Captured Barcode Photo"/>
+                    </div>
+                    <div class="alert alert-info o_camera_status mb-3">
+                        Align barcode within camera view or tap "Take Photo" above...
+                    </div>
+                    <div class="input-group">
+                        <input type="text" class="form-control o_input_manual_barcode" placeholder="Enter barcode manually if needed..."/>
+                        <div class="input-group-append">
+                            <button class="btn btn-primary o_btn_submit_manual_barcode" type="button">Process</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-right">
+                    <button class="btn btn-secondary o_btn_close_scanner" type="button">Done / Close</button>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

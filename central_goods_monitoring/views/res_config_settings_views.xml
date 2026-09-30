@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.central.goods.monitoring</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="90"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='settings']" position="inside">
+                <div class="app_settings_block" data-string="Central Monitoring" string="Central Monitoring" data-key="central_goods_monitoring">
+                    <h2>Central Goods Monitoring</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="remote_server_url"/>
+                                <div class="text-muted">
+                                    URL of Computer A (e.g., http://192.168.1.100:8069)
+                                </div>
+                                <field name="remote_server_url"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="remote_server_db"/>
+                                <field name="remote_server_db"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="remote_server_username"/>
+                                <field name="remote_server_username"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="remote_server_password"/>
+                                <field name="remote_server_password" password="True"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="connection_status"/>
+                                <div class="mt8">
+                                    <field name="connection_status" widget="label_selection"
+                                           options="{'classes': {'connected': 'success', 'not_connected': 'danger'}}"
+                                           readonly="1" nolabel="1"/>
+                                    <button name="action_test_connection" type="object" string="Test Connection" class="btn-link" icon="fa-refresh"/>
+                                    <button name="action_fetch_data" type="object" string="Fetch Data Now" class="btn-link" icon="fa-download" attrs="{'invisible': [('connection_status', '!=', 'connected')]}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>Destination Location Name</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="destination_location_name"/>
+                                <div class="text-muted">
+                                    Name data appears based on destination location
+                                </div>
+                                <field name="destination_location_name"/>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>Filter By Branch Stock Source Location</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="filter_branch_source_location_ids"/>
+                                <div class="text-muted">
+                                    Filter By Branch Stock Source Location
+                                </div>
+                                <field name="filter_branch_source_location_ids" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
