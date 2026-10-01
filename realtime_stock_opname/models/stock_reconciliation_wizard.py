@@ -149,6 +149,52 @@ class StockReconciliationWizard(models.TransientModel):
 
         return sold_map
 
+    def _get_sold_capital_map(self, product_ids, start_dt, end_dt, sold_qty_map):
+        if not product_ids:
+            return {}
+
+        cr = self.env.cr
+        capital_map = {pid: 0.0 for pid in product_ids}
+        val_qty_map = {pid: 0.0 for pid in product_ids}
+
+        cr.execute("""
+            SELECT EXISTS (
+                SELECT 1 FROM information_schema.tables WHERE table_name = 'stock_valuation_layer'
+            )
+        """)
+        has_svl = cr.fetchone()[0]
+
+        if has_svl:
+            query_svl = """
+                SELECT svl.product_id, SUM(ABS(svl.value)), SUM(ABS(svl.quantity))
+                FROM stock_valuation_layer svl
+                JOIN stock_move sm ON sm.id = svl.stock_move_id
+                JOIN stock_location dest_loc ON dest_loc.id = sm.location_dest_id
+                WHERE svl.product_id IN %s
+                  AND sm.state = 'done'
+                  AND dest_loc.usage = 'customer'
+                  AND sm.date >= %s
+                  AND sm.date <= %s
+                  AND svl.quantity < 0
+                GROUP BY svl.product_id
+            """
+            cr.execute(query_svl, (tuple(product_ids), start_dt, end_dt))
+            for pid, val_sum, qty_sum in cr.fetchall():
+                if pid in capital_map:
+                    capital_map[pid] += (val_sum or 0.0)
+                    val_qty_map[pid] += (qty_sum or 0.0)
+
+        products = self.env['product.product'].browse(product_ids)
+        for product in products:
+            pid = product.id
+            total_sold = sold_qty_map.get(pid, 0.0)
+            covered_qty = val_qty_map.get(pid, 0.0)
+            uncovered_qty = max(0.0, total_sold - covered_qty)
+            if uncovered_qty > 0:
+                capital_map[pid] += uncovered_qty * (product.standard_price or 0.0)
+
+        return capital_map
+
     def _get_quantity_in_map(self, product_ids, start_dt, end_dt):
         if not product_ids:
             return {}
@@ -304,6 +350,7 @@ class StockReconciliationWizard(models.TransientModel):
 
         initial_qty_map = self._get_initial_qty_map(all_product_ids, start_dt)
         sold_qty_map = self._get_sold_qty_map(all_product_ids, start_dt, end_dt)
+        sold_capital_map = self._get_sold_capital_map(all_product_ids, start_dt, end_dt, sold_qty_map)
         quantity_in_map = self._get_quantity_in_map(all_product_ids, start_dt, end_dt)
 
         opname_line_by_product = {}
@@ -354,7 +401,7 @@ class StockReconciliationWizard(models.TransientModel):
             sold_qty = sold_qty_map.get(product.id, 0.0)
             quantity_in = quantity_in_map.get(product.id, 0.0)
             ending_qty = initial_qty + quantity_in - sold_qty
-            total_capital = sold_qty * (product.standard_price or 0.0)
+            total_capital = sold_capital_map.get(product.id, 0.0)
 
             worksheet.write(row_num, 0, product_name, cell_format)
             worksheet.write(row_num, 1, barcode, cell_format)
