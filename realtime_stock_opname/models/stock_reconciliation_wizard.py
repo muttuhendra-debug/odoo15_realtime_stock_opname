@@ -373,7 +373,7 @@ class StockReconciliationWizard(models.TransientModel):
         cell_format = workbook.add_format({'border': 1})
         num_format = workbook.add_format({'border': 1, 'num_format': '#,##0.00'})
 
-        headers = ['Product', 'Barcode', 'Current Qty', 'Stock Qty', 'Initial Qty', 'Ending Qty', 'Sold Qty', 'Quantity In', 'TOTAL CAPITAL', 'TOTAL SALES']
+        headers = ['Product', 'Barcode', 'Current Qty', 'Stock Qty', 'Initial Qty', 'Ending Qty', 'Sold Qty', 'Quantity In', 'Total Cost', 'Total Sales']
         for col_num, header in enumerate(headers):
             worksheet.write(0, col_num, header, header_format)
             worksheet.set_column(col_num, col_num, 20)
