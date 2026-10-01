@@ -326,7 +326,7 @@ class StockReconciliationWizard(models.TransientModel):
         cell_format = workbook.add_format({'border': 1})
         num_format = workbook.add_format({'border': 1, 'num_format': '#,##0.00'})
 
-        headers = ['Product', 'Barcode', 'Current Qty', 'Stock Qty', 'Initial Qty', 'Ending Qty', 'Sold Qty', 'Quantity In']
+        headers = ['Product', 'Barcode', 'Current Qty', 'Stock Qty', 'Initial Qty', 'Ending Qty', 'Sold Qty', 'Quantity In', 'TOTAL CAPITAL']
         for col_num, header in enumerate(headers):
             worksheet.write(0, col_num, header, header_format)
             worksheet.set_column(col_num, col_num, 20)
@@ -354,6 +354,7 @@ class StockReconciliationWizard(models.TransientModel):
             sold_qty = sold_qty_map.get(product.id, 0.0)
             quantity_in = quantity_in_map.get(product.id, 0.0)
             ending_qty = initial_qty + quantity_in - sold_qty
+            total_capital = ending_qty * (product.standard_price or 0.0)
 
             worksheet.write(row_num, 0, product_name, cell_format)
             worksheet.write(row_num, 1, barcode, cell_format)
@@ -363,6 +364,7 @@ class StockReconciliationWizard(models.TransientModel):
             worksheet.write(row_num, 5, ending_qty, num_format)
             worksheet.write(row_num, 6, sold_qty, num_format)
             worksheet.write(row_num, 7, quantity_in, num_format)
+            worksheet.write(row_num, 8, total_capital, num_format)
             row_num += 1
 
         workbook.close()
