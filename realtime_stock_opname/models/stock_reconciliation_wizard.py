@@ -354,7 +354,7 @@ class StockReconciliationWizard(models.TransientModel):
             sold_qty = sold_qty_map.get(product.id, 0.0)
             quantity_in = quantity_in_map.get(product.id, 0.0)
             ending_qty = initial_qty + quantity_in - sold_qty
-            total_capital = ending_qty * (product.standard_price or 0.0)
+            total_capital = sold_qty * (product.standard_price or 0.0)
 
             worksheet.write(row_num, 0, product_name, cell_format)
             worksheet.write(row_num, 1, barcode, cell_format)
