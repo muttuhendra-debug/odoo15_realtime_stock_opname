@@ -378,17 +378,18 @@ class StockReconciliationWizard(models.TransientModel):
             worksheet.write(0, col_num, header, header_format)
             worksheet.set_column(col_num, col_num, 20)
 
+        import re
         row_num = 1
         products = self.env['product.product'].browse(list(all_product_ids))
         for product in products:
             line = opname_line_by_product.get(product.id)
             if line:
-                product_name = line.product_name or product.display_name
+                product_name = product.name or line.product_name or product.display_name
                 barcode = line.barcode or product.barcode or ''
                 current_qty = line.current_qty
                 stock_qty = line.quantity
             else:
-                product_name = product.display_name
+                product_name = product.name or product.display_name
                 barcode = product.barcode or ''
                 quants = self.env['stock.quant'].search([
                     ('product_id', '=', product.id),
@@ -396,6 +397,9 @@ class StockReconciliationWizard(models.TransientModel):
                 ])
                 current_qty = sum(quants.mapped('quantity'))
                 stock_qty = 0.0
+
+            if product_name:
+                product_name = re.sub(r'^\[.*?\]\s*', '', product_name).strip()
 
             initial_qty = initial_qty_map.get(product.id, 0.0)
             sold_qty = sold_qty_map.get(product.id, 0.0)
