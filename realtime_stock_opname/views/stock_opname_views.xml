@@ -398,13 +398,6 @@
     <menuitem id="menu_stock_opname_division" name="Division" parent="menu_realtime_stock_opname_config" action="action_stock_opname_division" sequence="20"/>
 
     <menuitem id="menu_stock_inventory_audit_root" name="Stock inventory audit" web_icon="realtime_stock_opname,static/description/icon.png" groups="group_realtime_stock_opname_user" sequence="26"/>
-    <menuitem id="menu_stock_inventory_audit_session" name="Stock Opname Session" parent="menu_stock_inventory_audit_root" action="action_realtime_stock_opname" sequence="10"/>
-    <menuitem id="menu_stock_inventory_audit_stocktaking_list" name="Stocktaking List" parent="menu_stock_inventory_audit_root" action="action_stocktaking_list" sequence="20"/>
-    <menuitem id="menu_stock_inventory_audit_products_not_recorded" name="Product Not Recorded in Stock Take" parent="menu_stock_inventory_audit_root" action="action_products_not_recorded" sequence="30"/>
-    <menuitem id="menu_stock_inventory_audit_reporting" name="Reporting" parent="menu_stock_inventory_audit_root" sequence="80"/>
-    <menuitem id="menu_stock_inventory_audit_report_discrepancies" name="Report on Discrepancies Before and After Stocktaking" parent="menu_stock_inventory_audit_reporting" action="action_report_stock_discrepancies" sequence="10"/>
-    <menuitem id="menu_stock_inventory_audit_config" name="Configuration" parent="menu_stock_inventory_audit_root" sequence="90" groups="base.group_system"/>
-    <menuitem id="menu_stock_inventory_audit_division" name="Division" parent="menu_stock_inventory_audit_config" action="action_stock_opname_division" sequence="20"/>
 
     <record id="view_stock_reconciliation_wizard_form" model="ir.ui.view">
         <field name="name">stock.reconciliation.wizard.form</field>
@@ -435,5 +428,5 @@
     </record>
 
     <menuitem id="menu_stock_reconciliation" name="Stock Reconciliation" parent="menu_realtime_stock_opname_reporting" action="action_stock_reconciliation_wizard" sequence="20"/>
-    <menuitem id="menu_stock_inventory_audit_reconciliation" name="Stock Reconciliation" parent="menu_stock_inventory_audit_reporting" action="action_stock_reconciliation_wizard" sequence="20"/>
+    <menuitem id="menu_stock_inventory_audit_reconciliation" name="Stock Reconciliation" parent="menu_stock_inventory_audit_root" action="action_stock_reconciliation_wizard" sequence="10"/>
 </odoo>
