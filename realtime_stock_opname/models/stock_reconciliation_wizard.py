@@ -344,9 +344,8 @@ class StockReconciliationWizard(models.TransientModel):
             ('opname_id.date', '<=', end_dt)
         ])
 
-        opname_product_ids = set(line.product_id.id for line in lines if line.product_id)
-        cgm_product_ids = self._get_cgm_product_ids(start_dt, end_dt)
-        all_product_ids = opname_product_ids | cgm_product_ids
+        all_products = self.env['product.product'].search([])
+        all_product_ids = set(all_products.ids)
 
         initial_qty_map = self._get_initial_qty_map(all_product_ids, start_dt)
         sold_qty_map = self._get_sold_qty_map(all_product_ids, start_dt, end_dt)
