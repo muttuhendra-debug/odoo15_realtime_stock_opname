@@ -427,6 +427,5 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem id="menu_stock_reconciliation" name="Stock Reconciliation" parent="menu_realtime_stock_opname_reporting" action="action_stock_reconciliation_wizard" sequence="20"/>
     <menuitem id="menu_stock_inventory_audit_reconciliation" name="Stock Reconciliation" parent="menu_stock_inventory_audit_root" action="action_stock_reconciliation_wizard" sequence="10"/>
 </odoo>
