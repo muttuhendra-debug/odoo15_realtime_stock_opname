@@ -30,8 +30,6 @@ Dan menyediakan kolom Quantity untuk mengisi jumlah data stok pada produk terseb
             'realtime_stock_opname/static/src/js/barcode_camera_scanner.js',
             'realtime_stock_opname/static/src/js/barcode_autofocus.js',
             'realtime_stock_opname/static/src/js/stock_reconciliation_list_button.js',
-            'realtime_stock_opname/static/src/xml/camera_scanner_templates.xml',
-            'realtime_stock_opname/static/src/xml/stock_reconciliation_button.xml',
         ],
         'web.assets_qweb': [
             'realtime_stock_opname/static/src/xml/camera_scanner_templates.xml',
