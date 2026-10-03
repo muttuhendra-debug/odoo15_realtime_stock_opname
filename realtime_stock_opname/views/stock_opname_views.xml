@@ -408,17 +408,17 @@
         <field name="model">stock.reconciliation.line</field>
         <field name="arch" type="xml">
             <tree string="Stock Reconciliation" js_class="stock_reconciliation_list_button" create="false" edit="false" delete="false">
-                <field name="product_name" string="Product"/>
-                <field name="barcode"/>
-                <field name="categ_id"/>
-                <field name="initial_qty"/>
-                <field name="ending_qty"/>
-                <field name="sold_qty"/>
-                <field name="quantity_in"/>
-                <field name="total_cost"/>
-                <field name="total_sales"/>
-                <field name="total_cost_incoming"/>
-                <field name="total_sales_incoming"/>
+                <field name="product_name" string="Product" optional="show"/>
+                <field name="barcode" optional="show"/>
+                <field name="categ_id" optional="show"/>
+                <field name="initial_qty" optional="show"/>
+                <field name="ending_qty" optional="show"/>
+                <field name="sold_qty" optional="show"/>
+                <field name="quantity_in" optional="show"/>
+                <field name="total_cost" optional="show"/>
+                <field name="total_sales" optional="show"/>
+                <field name="total_cost_incoming" optional="show"/>
+                <field name="total_sales_incoming" optional="show"/>
             </tree>
         </field>
     </record>
