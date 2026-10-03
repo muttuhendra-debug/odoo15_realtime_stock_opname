@@ -372,7 +372,7 @@ class StockReconciliationWizard(models.TransientModel):
         cell_format = workbook.add_format({'border': 1})
         num_format = workbook.add_format({'border': 1, 'num_format': '#,##0.00'})
 
-        headers = ['Product', 'Barcode', 'Product Category', 'Current Qty', 'Stock Qty', 'Initial Qty', 'Ending Qty', 'Sold Qty', 'Quantity In', 'Total Cost', 'Total Sales', 'Total Cost Of Incoming Goods', 'Total Sales Of Incoming Goods']
+        headers = ['Product', 'Barcode', 'Product Category', 'Initial Qty', 'Ending Qty', 'Sold Qty', 'Quantity In', 'Total Cost', 'Total Sales', 'Total Cost Of Incoming Goods', 'Total Sales Of Incoming Goods']
         for col_num, header in enumerate(headers):
             worksheet.write(0, col_num, header, header_format)
             worksheet.set_column(col_num, col_num, 20)
@@ -385,17 +385,9 @@ class StockReconciliationWizard(models.TransientModel):
             if line:
                 product_name = product.name or line.product_name or product.display_name
                 barcode = line.barcode or product.barcode or ''
-                current_qty = line.current_qty
-                stock_qty = line.quantity
             else:
                 product_name = product.name or product.display_name
                 barcode = product.barcode or ''
-                quants = self.env['stock.quant'].search([
-                    ('product_id', '=', product.id),
-                    ('location_id.usage', '=', 'internal')
-                ])
-                current_qty = sum(quants.mapped('quantity'))
-                stock_qty = 0.0
 
             if product_name:
                 product_name = re.sub(r'^\[.*?\]\s*', '', product_name).strip()
@@ -413,16 +405,14 @@ class StockReconciliationWizard(models.TransientModel):
             worksheet.write(row_num, 0, product_name, cell_format)
             worksheet.write(row_num, 1, barcode, cell_format)
             worksheet.write(row_num, 2, category_name, cell_format)
-            worksheet.write(row_num, 3, current_qty, num_format)
-            worksheet.write(row_num, 4, stock_qty, num_format)
-            worksheet.write(row_num, 5, initial_qty, num_format)
-            worksheet.write(row_num, 6, ending_qty, num_format)
-            worksheet.write(row_num, 7, sold_qty, num_format)
-            worksheet.write(row_num, 8, quantity_in, num_format)
-            worksheet.write(row_num, 9, total_capital, num_format)
-            worksheet.write(row_num, 10, total_sales, num_format)
-            worksheet.write(row_num, 11, total_cost_incoming, num_format)
-            worksheet.write(row_num, 12, total_sales_incoming, num_format)
+            worksheet.write(row_num, 3, initial_qty, num_format)
+            worksheet.write(row_num, 4, ending_qty, num_format)
+            worksheet.write(row_num, 5, sold_qty, num_format)
+            worksheet.write(row_num, 6, quantity_in, num_format)
+            worksheet.write(row_num, 7, total_capital, num_format)
+            worksheet.write(row_num, 8, total_sales, num_format)
+            worksheet.write(row_num, 9, total_cost_incoming, num_format)
+            worksheet.write(row_num, 10, total_sales_incoming, num_format)
             row_num += 1
 
         workbook.close()
