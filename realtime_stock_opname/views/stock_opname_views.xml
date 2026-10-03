@@ -474,10 +474,12 @@
     </record>
 
     <record id="action_stock_reconciliation_wizard" model="ir.actions.act_window">
-        <field name="name">Stock Reconciliation</field>
+        <field name="name">Tarik Data</field>
         <field name="res_model">stock.reconciliation.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
+        <field name="binding_model_id" ref="model_stock_reconciliation_line"/>
+        <field name="binding_view_types">list</field>
     </record>
 
     <menuitem id="menu_stock_inventory_audit_reconciliation" name="Stock Reconciliation" parent="menu_stock_inventory_audit_root" action="action_stock_reconciliation_line" sequence="10"/>
