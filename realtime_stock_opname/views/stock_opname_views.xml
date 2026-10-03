@@ -7,6 +7,7 @@
         <field name="padding">5</field>
         <field name="company_id" eval="False"/>
     </record>
+
     <record id="view_realtime_stock_opname_tree" model="ir.ui.view">
         <field name="name">realtime.stock.opname.tree</field>
         <field name="model">realtime.stock.opname</field>
@@ -21,6 +22,7 @@
             </tree>
         </field>
     </record>
+
     <record id="view_realtime_stock_opname_form" model="ir.ui.view">
         <field name="name">realtime.stock.opname.form</field>
         <field name="model">realtime.stock.opname</field>
@@ -73,6 +75,7 @@
             </form>
         </field>
     </record>
+
     <record id="view_realtime_stock_opname_qty_wizard_form" model="ir.ui.view">
         <field name="name">realtime.stock.opname.qty.wizard.form</field>
         <field name="model">realtime.stock.opname.qty.wizard</field>
@@ -399,6 +402,55 @@
 
     <menuitem id="menu_stock_inventory_audit_root" name="Stock inventory audit" web_icon="realtime_stock_opname,static/description/icon.png" groups="group_realtime_stock_opname_user" sequence="26"/>
 
+    <!-- Stock Reconciliation Line Views -->
+    <record id="view_stock_reconciliation_line_tree" model="ir.ui.view">
+        <field name="name">stock.reconciliation.line.tree</field>
+        <field name="model">stock.reconciliation.line</field>
+        <field name="arch" type="xml">
+            <tree string="Stock Reconciliation" create="false" edit="false" delete="false">
+                <header>
+                    <button name="action_open_wizard" string="Fetch" type="object" class="btn-primary"/>
+                </header>
+                <field name="product_name" string="Product"/>
+                <field name="barcode"/>
+                <field name="categ_id"/>
+                <field name="initial_qty"/>
+                <field name="ending_qty"/>
+                <field name="sold_qty"/>
+                <field name="quantity_in"/>
+                <field name="total_cost"/>
+                <field name="total_sales"/>
+                <field name="total_cost_incoming"/>
+                <field name="total_sales_incoming"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_stock_reconciliation_line_search" model="ir.ui.view">
+        <field name="name">stock.reconciliation.line.search</field>
+        <field name="model">stock.reconciliation.line</field>
+        <field name="arch" type="xml">
+            <search string="Stock Reconciliation Search">
+                <field name="product_name" string="Product"/>
+                <field name="barcode"/>
+                <field name="categ_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product Category" name="group_category" context="{'group_by': 'categ_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_stock_reconciliation_line" model="ir.actions.act_window">
+        <field name="name">Stock Reconciliation</field>
+        <field name="res_model">stock.reconciliation.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_stock_reconciliation_line_tree"/>
+        <field name="search_view_id" ref="view_stock_reconciliation_line_search"/>
+        <field name="domain">[('user_id', '=', uid)]</field>
+    </record>
+
+    <!-- Stock Reconciliation Wizard View -->
     <record id="view_stock_reconciliation_wizard_form" model="ir.ui.view">
         <field name="name">stock.reconciliation.wizard.form</field>
         <field name="model">stock.reconciliation.wizard</field>
@@ -413,7 +465,8 @@
                     </group>
                 </sheet>
                 <footer>
-                    <button name="action_print_excel" string="Print Excel" type="object" class="btn-primary"/>
+                    <button name="action_fetch_data" string="Fetch Data" type="object" class="btn-primary"/>
+                    <button name="action_print_excel" string="Print Excel" type="object" class="btn-secondary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
@@ -427,5 +480,5 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem id="menu_stock_inventory_audit_reconciliation" name="Stock Reconciliation" parent="menu_stock_inventory_audit_root" action="action_stock_reconciliation_wizard" sequence="10"/>
+    <menuitem id="menu_stock_inventory_audit_reconciliation" name="Stock Reconciliation" parent="menu_stock_inventory_audit_root" action="action_stock_reconciliation_line" sequence="10"/>
 </odoo>
