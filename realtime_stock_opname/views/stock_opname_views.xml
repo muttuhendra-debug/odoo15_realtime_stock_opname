@@ -409,7 +409,7 @@
         <field name="arch" type="xml">
             <tree string="Stock Reconciliation" create="false" edit="false" delete="false">
                 <header>
-                    <button name="action_open_wizard" string="Fetch" type="object" class="btn-primary"/>
+                    <button name="action_open_wizard" string="Tarik Data" type="object" class="btn-primary"/>
                 </header>
                 <field name="product_name" string="Product"/>
                 <field name="barcode"/>
@@ -465,7 +465,7 @@
                     </group>
                 </sheet>
                 <footer>
-                    <button name="action_fetch_data" string="Fetch Data" type="object" class="btn-primary"/>
+                    <button name="action_fetch_data" string="Tarik Data" type="object" class="btn-primary"/>
                     <button name="action_print_excel" string="Print Excel" type="object" class="btn-secondary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
