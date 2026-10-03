@@ -17,6 +17,10 @@ class StockQuant(models.Model):
         readonly=True,
         store=True
     )
+    is_quantity_editable = fields.Boolean(
+        string='Is Quantity Editable',
+        default=True
+    )
 
 
 class StockOpnameDivision(models.Model):

@@ -7,6 +7,7 @@
         <field name="padding">5</field>
         <field name="company_id" eval="False"/>
     </record>
+
     <record id="view_realtime_stock_opname_tree" model="ir.ui.view">
         <field name="name">realtime.stock.opname.tree</field>
         <field name="model">realtime.stock.opname</field>
@@ -21,6 +22,7 @@
             </tree>
         </field>
     </record>
+
     <record id="view_realtime_stock_opname_form" model="ir.ui.view">
         <field name="name">realtime.stock.opname.form</field>
         <field name="model">realtime.stock.opname</field>
@@ -73,6 +75,7 @@
             </form>
         </field>
     </record>
+
     <record id="view_realtime_stock_opname_qty_wizard_form" model="ir.ui.view">
         <field name="name">realtime.stock.opname.qty.wizard.form</field>
         <field name="model">realtime.stock.opname.qty.wizard</field>
@@ -397,15 +400,54 @@
     <menuitem id="menu_realtime_stock_opname_config" name="Configuration" parent="menu_realtime_stock_opname_root" sequence="90" groups="base.group_system"/>
     <menuitem id="menu_stock_opname_division" name="Division" parent="menu_realtime_stock_opname_config" action="action_stock_opname_division" sequence="20"/>
 
-    <menuitem id="menu_stock_inventory_audit_root" name="Stock inventory audit" web_icon="realtime_stock_opname,static/description/icon.png" groups="group_realtime_stock_opname_user" sequence="26"/>
-    <menuitem id="menu_stock_inventory_audit_session" name="Stock Opname Session" parent="menu_stock_inventory_audit_root" action="action_realtime_stock_opname" sequence="10"/>
-    <menuitem id="menu_stock_inventory_audit_stocktaking_list" name="Stocktaking List" parent="menu_stock_inventory_audit_root" action="action_stocktaking_list" sequence="20"/>
-    <menuitem id="menu_stock_inventory_audit_products_not_recorded" name="Product Not Recorded in Stock Take" parent="menu_stock_inventory_audit_root" action="action_products_not_recorded" sequence="30"/>
-    <menuitem id="menu_stock_inventory_audit_reporting" name="Reporting" parent="menu_stock_inventory_audit_root" sequence="80"/>
-    <menuitem id="menu_stock_inventory_audit_report_discrepancies" name="Report on Discrepancies Before and After Stocktaking" parent="menu_stock_inventory_audit_reporting" action="action_report_stock_discrepancies" sequence="10"/>
-    <menuitem id="menu_stock_inventory_audit_config" name="Configuration" parent="menu_stock_inventory_audit_root" sequence="90" groups="base.group_system"/>
-    <menuitem id="menu_stock_inventory_audit_division" name="Division" parent="menu_stock_inventory_audit_config" action="action_stock_opname_division" sequence="20"/>
+    <menuitem id="menu_stock_inventory_audit_root" name="Stock inventory audit" web_icon="realtime_stock_opname,static/description/icon.png" groups="group_stock_inventory_audit_user" sequence="26"/>
 
+    <!-- Stock Reconciliation Line Views -->
+    <record id="view_stock_reconciliation_line_tree" model="ir.ui.view">
+        <field name="name">stock.reconciliation.line.tree</field>
+        <field name="model">stock.reconciliation.line</field>
+        <field name="arch" type="xml">
+            <tree string="Stock Reconciliation" js_class="stock_reconciliation_list_button" create="false" edit="false" delete="false">
+                <field name="product_name" string="Product" optional="show"/>
+                <field name="barcode" optional="show"/>
+                <field name="categ_id" optional="show"/>
+                <field name="initial_qty" optional="show"/>
+                <field name="ending_qty" optional="show"/>
+                <field name="sold_qty" optional="show"/>
+                <field name="quantity_in" optional="show"/>
+                <field name="total_cost" optional="show"/>
+                <field name="total_sales" optional="show"/>
+                <field name="total_cost_incoming" optional="show"/>
+                <field name="total_sales_incoming" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_stock_reconciliation_line_search" model="ir.ui.view">
+        <field name="name">stock.reconciliation.line.search</field>
+        <field name="model">stock.reconciliation.line</field>
+        <field name="arch" type="xml">
+            <search string="Stock Reconciliation Search">
+                <field name="product_name" string="Product"/>
+                <field name="barcode"/>
+                <field name="categ_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product Category" name="group_category" context="{'group_by': 'categ_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_stock_reconciliation_line" model="ir.actions.act_window">
+        <field name="name">Stock Reconciliation</field>
+        <field name="res_model">stock.reconciliation.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_stock_reconciliation_line_tree"/>
+        <field name="search_view_id" ref="view_stock_reconciliation_line_search"/>
+        <field name="domain">[('user_id', '=', uid)]</field>
+    </record>
+
+    <!-- Stock Reconciliation Wizard View -->
     <record id="view_stock_reconciliation_wizard_form" model="ir.ui.view">
         <field name="name">stock.reconciliation.wizard.form</field>
         <field name="model">stock.reconciliation.wizard</field>
@@ -420,7 +462,8 @@
                     </group>
                 </sheet>
                 <footer>
-                    <button name="action_print_excel" string="Print Excel" type="object" class="btn-primary"/>
+                    <button name="action_fetch_data" string="Tarik Data" type="object" class="btn-primary"/>
+                    <button name="action_print_excel" string="Print Excel" type="object" class="btn-secondary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
@@ -428,12 +471,13 @@
     </record>
 
     <record id="action_stock_reconciliation_wizard" model="ir.actions.act_window">
-        <field name="name">Stock Reconciliation</field>
+        <field name="name">Tarik Data</field>
         <field name="res_model">stock.reconciliation.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
+        <field name="binding_model_id" ref="model_stock_reconciliation_line"/>
+        <field name="binding_view_types">list</field>
     </record>
 
-    <menuitem id="menu_stock_reconciliation" name="Stock Reconciliation" parent="menu_realtime_stock_opname_reporting" action="action_stock_reconciliation_wizard" sequence="20"/>
-    <menuitem id="menu_stock_inventory_audit_reconciliation" name="Stock Reconciliation" parent="menu_stock_inventory_audit_reporting" action="action_stock_reconciliation_wizard" sequence="20"/>
+    <menuitem id="menu_stock_inventory_audit_reconciliation" name="Stock Reconciliation" parent="menu_stock_inventory_audit_root" action="action_stock_reconciliation_line" sequence="10"/>
 </odoo>

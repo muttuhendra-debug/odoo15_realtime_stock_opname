@@ -29,9 +29,17 @@ Dan menyediakan kolom Quantity untuk mengisi jumlah data stok pada produk terseb
             'realtime_stock_opname/static/src/js/quagga.min.js',
             'realtime_stock_opname/static/src/js/barcode_camera_scanner.js',
             'realtime_stock_opname/static/src/js/barcode_autofocus.js',
+            'realtime_stock_opname/static/src/js/stock_reconciliation_list_button.js',
+        ],
+        'web.assets_qweb': [
             'realtime_stock_opname/static/src/xml/camera_scanner_templates.xml',
+            'realtime_stock_opname/static/src/xml/stock_reconciliation_button.xml',
         ],
     },
+    'qweb': [
+        'static/src/xml/camera_scanner_templates.xml',
+        'static/src/xml/stock_reconciliation_button.xml',
+    ],
     'installable': True,
     'application': True,
     'auto_install': False,
