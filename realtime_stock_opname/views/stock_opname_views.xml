@@ -400,7 +400,7 @@
     <menuitem id="menu_realtime_stock_opname_config" name="Configuration" parent="menu_realtime_stock_opname_root" sequence="90" groups="base.group_system"/>
     <menuitem id="menu_stock_opname_division" name="Division" parent="menu_realtime_stock_opname_config" action="action_stock_opname_division" sequence="20"/>
 
-    <menuitem id="menu_stock_inventory_audit_root" name="Stock inventory audit" web_icon="realtime_stock_opname,static/description/icon.png" groups="group_realtime_stock_opname_user" sequence="26"/>
+    <menuitem id="menu_stock_inventory_audit_root" name="Stock inventory audit" web_icon="realtime_stock_opname,static/description/icon.png" groups="group_stock_inventory_audit_user" sequence="26"/>
 
     <!-- Stock Reconciliation Line Views -->
     <record id="view_stock_reconciliation_line_tree" model="ir.ui.view">

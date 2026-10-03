@@ -45,6 +45,14 @@ class ResConfigSettings(models.TransientModel):
         string='Allowed Delete Line Users',
         help='Specific users who are allowed to delete lines in Realtime Stock Opname.'
     )
+    stock_inventory_audit_user_ids = fields.Many2many(
+        'res.users',
+        'rel_stock_inventory_audit_config_users',
+        'config_id',
+        'user_id',
+        string='Allowed Users',
+        help='Specific users who are allowed to access the Stock Inventory Audit Opname menu in the backend.'
+    )
     stock_opname_location_ids = fields.Many2many(
         'stock.location',
         'rel_stock_opname_config_locations',
@@ -63,6 +71,7 @@ class ResConfigSettings(models.TransientModel):
         group_lock = self.env.ref('realtime_stock_opname.group_realtime_stock_opname_lock', raise_if_not_found=False)
         group_unlock = self.env.ref('realtime_stock_opname.group_realtime_stock_opname_unlock', raise_if_not_found=False)
         group_delete = self.env.ref('realtime_stock_opname.group_realtime_stock_opname_delete', raise_if_not_found=False)
+        group_audit = self.env.ref('realtime_stock_opname.group_stock_inventory_audit_user', raise_if_not_found=False)
 
         if group_user:
             res.update(
@@ -84,6 +93,10 @@ class ResConfigSettings(models.TransientModel):
             res.update(
                 stock_opname_delete_user_ids=[(6, 0, group_delete.users.ids)]
             )
+        if group_audit:
+            res.update(
+                stock_inventory_audit_user_ids=[(6, 0, group_audit.users.ids)]
+            )
 
         location_ids_param = self.env['ir.config_parameter'].sudo().get_param('realtime_stock_opname.stock_opname_location_ids', False)
         if location_ids_param:
@@ -100,6 +113,7 @@ class ResConfigSettings(models.TransientModel):
         group_lock = self.env.ref('realtime_stock_opname.group_realtime_stock_opname_lock', raise_if_not_found=False)
         group_unlock = self.env.ref('realtime_stock_opname.group_realtime_stock_opname_unlock', raise_if_not_found=False)
         group_delete = self.env.ref('realtime_stock_opname.group_realtime_stock_opname_delete', raise_if_not_found=False)
+        group_audit = self.env.ref('realtime_stock_opname.group_stock_inventory_audit_user', raise_if_not_found=False)
 
         if group_user:
             group_user.sudo().write({
@@ -120,6 +134,10 @@ class ResConfigSettings(models.TransientModel):
         if group_delete:
             group_delete.sudo().write({
                 'users': [(6, 0, self.stock_opname_delete_user_ids.ids)]
+            })
+        if group_audit:
+            group_audit.sudo().write({
+                'users': [(6, 0, self.stock_inventory_audit_user_ids.ids)]
             })
 
         loc_ids_str = ','.join(map(str, self.stock_opname_location_ids.ids)) if self.stock_opname_location_ids else ''
