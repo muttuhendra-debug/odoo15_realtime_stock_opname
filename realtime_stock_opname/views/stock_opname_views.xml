@@ -482,5 +482,6 @@
         <field name="binding_view_types">list</field>
     </record>
 
+    <menuitem id="menu_stock_inventory_audit_tarik_data" name="Tarik Data" parent="menu_stock_inventory_audit_root" action="action_stock_reconciliation_wizard" sequence="5"/>
     <menuitem id="menu_stock_inventory_audit_reconciliation" name="Stock Reconciliation" parent="menu_stock_inventory_audit_root" action="action_stock_reconciliation_line" sequence="10"/>
 </odoo>
