@@ -407,10 +407,7 @@
         <field name="name">stock.reconciliation.line.tree</field>
         <field name="model">stock.reconciliation.line</field>
         <field name="arch" type="xml">
-            <tree string="Stock Reconciliation" create="false" edit="false" delete="false">
-                <header>
-                    <button name="action_open_wizard" string="Tarik Data" type="object" class="btn-primary"/>
-                </header>
+            <tree string="Stock Reconciliation" js_class="stock_reconciliation_list_button" create="false" edit="false" delete="false">
                 <field name="product_name" string="Product"/>
                 <field name="barcode"/>
                 <field name="categ_id"/>
@@ -482,6 +479,5 @@
         <field name="binding_view_types">list</field>
     </record>
 
-    <menuitem id="menu_stock_inventory_audit_tarik_data" name="Tarik Data" parent="menu_stock_inventory_audit_root" action="action_stock_reconciliation_wizard" sequence="5"/>
     <menuitem id="menu_stock_inventory_audit_reconciliation" name="Stock Reconciliation" parent="menu_stock_inventory_audit_root" action="action_stock_reconciliation_line" sequence="10"/>
 </odoo>
